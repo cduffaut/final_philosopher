@@ -6,7 +6,7 @@
 /*   By: csil <csil@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:11:20 by csil              #+#    #+#             */
-/*   Updated: 2023/12/09 17:53:52 by csil             ###   ########.fr       */
+/*   Updated: 2023/12/09 21:11:08 by csil             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	exec_mutex(t_bag *list, pthread_mutex_t *mutex, t_keyw kword)
 	else
 		print_error(list, "wrong mutex kword", EXIT_FAILURE);
 }
-
 
 // check if the mutex exec haven't any error
 void	check_exec_thread(t_bag *list, int result, t_keyw kword)

@@ -6,7 +6,7 @@
 /*   By: csil <csil@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 23:12:26 by csil              #+#    #+#             */
-/*   Updated: 2023/12/09 14:19:42 by csil             ###   ########.fr       */
+/*   Updated: 2023/12/09 21:12:57 by csil             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ void	init_lists(t_bag *stock);
 void	exec_thread(t_bag *list, pthread_t *thread, void *(*foo)(void *),
 			void *data, t_keyw kword);
 void	check_exec_thread(t_bag *list, int result, t_keyw kword);
-void	exec_mutex(t_bag *list, t_mtx *mutex, t_keyw kword);
+void	exec_mutex(t_bag *list, pthread_mutex_t *mutex,
+			t_keyw kword);
 void	check_exec_mutex(t_bag *list, int result, t_keyw kword);
 
 // Init philos threads
@@ -99,7 +100,6 @@ void	free_all_and_exit(t_bag *list, int nbr);
 
 // time
 long	get_time(t_bag *list);
-long	time_now(t_bag *list);
 void	ft_usleep(long nbr, t_bag *l);
 
 // routine

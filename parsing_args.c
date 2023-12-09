@@ -6,7 +6,7 @@
 /*   By: csil <csil@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:50:34 by csil              #+#    #+#             */
-/*   Updated: 2023/12/09 10:37:32 by csil             ###   ########.fr       */
+/*   Updated: 2023/12/09 21:15:22 by csil             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ void	parsing_args(t_bag *stock, char **argv)
 		stock->meals_to_eat = check_is_nbr_legit(argv[5]);
 	else
 		stock->meals_to_eat = -1;
+	if (stock->nbr_philo == 0)
+		print_error(NULL, "Error: one philo min is required", EXIT_FAILURE);
 	stock->dead = 0;
 	stock->end_simu = 0;
 	pthread_mutex_init(&stock->lock, NULL);

@@ -6,7 +6,7 @@
 /*   By: csil <csil@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 23:14:07 by csil              #+#    #+#             */
-/*   Updated: 2023/12/09 19:49:57 by csil             ###   ########.fr       */
+/*   Updated: 2023/12/09 21:13:10 by csil             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int	main(int argc, char **argv)
 	stock = (t_bag){};
 	if (argc == 5 || argc == 6)
 	{
-		// forgot gestion of the case philos is 0 !
 		parsing_args(&stock, argv);
 		init_lists(&stock);
 		if (stock.nbr_philo == 1)

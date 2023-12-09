@@ -6,7 +6,7 @@
 /*   By: csil <csil@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 10:15:39 by csil              #+#    #+#             */
-/*   Updated: 2023/12/09 20:15:24 by csil             ###   ########.fr       */
+/*   Updated: 2023/12/09 22:04:18 by csil             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,13 @@
 
 void	print_action(t_bag *l, int i, int msg)
 {
+	long	time;
+
 	pthread_mutex_lock(&l->print_state);
+	time = get_time(l) - l->start_time;
 	if (l->dead != 1)
 	{
-		printf ("%ld %d ", time_now(l), l->lphilo[i].id);
+		printf ("%ld %d ", time, l->lphilo[i].id);
 		if (msg == DIED && l->dead == 0)
 		{
 			printf ("died\n");
@@ -55,10 +58,9 @@ void	ft_eat(t_philo *philo)
 	exec_mutex(philo->stock, &philo->lock, LOCK);
 	philo->eating = 1;
 	philo->t_to_die = get_time(philo->stock) + philo->stock->time_to_die;
+	ft_usleep(philo->stock->time_to_eat, philo->stock);
 	print_action(philo->stock, philo->id - 1, EAT);
 	philo->meal_counter++;
-	printf ("MEAL COUNTER: %d\n", philo->meal_counter);
-	ft_usleep(philo->stock->time_to_eat, philo->stock);
 	philo->eating = 0;
 	exec_mutex(philo->stock, &philo->lock, UNLOCK);
 	ft_drop_forks(philo);
@@ -127,10 +129,8 @@ void	*monitor(void *philo)
 		}
 		if (lphilo->stock->meals_to_eat <= lphilo->meal_counter)
 		{
-			exec_mutex(lphilo->stock, &lphilo->stock->lock, LOCK);
 			lphilo->stock->end_simu = 1;
 			lphilo->meal_counter++;
-			exec_mutex(lphilo->stock, &lphilo->stock->lock, UNLOCK);
 		}
 		exec_mutex(lphilo->stock, &lphilo->lock, UNLOCK);
 	}
