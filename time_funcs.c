@@ -6,7 +6,7 @@
 /*   By: csil <csil@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 23:26:48 by csil              #+#    #+#             */
-/*   Updated: 2023/12/09 21:11:14 by csil             ###   ########.fr       */
+/*   Updated: 2023/12/09 22:58:12 by csil             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ long	get_time(t_bag *list)
 	}
 	else
 	{
-		print_error(list, "Error: gettimeofday failed", EXIT_FAILURE);
+		print_error(list, "Error: gettimeofday failed", EXIT_FAILURE, 1);
 	}
 	return (time);
 }

@@ -6,7 +6,7 @@
 /*   By: csil <csil@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 23:14:07 by csil              #+#    #+#             */
-/*   Updated: 2023/12/09 21:13:10 by csil             ###   ########.fr       */
+/*   Updated: 2023/12/09 22:57:16 by csil             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_one_philo(t_bag *stock)
 {
 	stock->start_time = get_time(stock);
 	exec_thread(stock, &stock->tid[0], &routine, &stock->lphilo[0], CREATE);
-	exec_thread(stock, &stock->tid[0], &routine, NULL, DETACH);
+	exec_thread(stock, &stock->tid[0], NULL, NULL, DETACH);
 	while (stock->dead == 0)
 		ft_usleep(0, stock);
 	free_all_and_exit(stock, 0);
@@ -43,7 +43,8 @@ int	main(int argc, char **argv)
 	}
 	else
 	{
-		print_error(&stock, "Error: wrong number of arguments", EXIT_FAILURE);
+		print_error(&stock, "Error: wrong number of arguments",
+			EXIT_FAILURE, 0);
 	}
 	return (0);
 }

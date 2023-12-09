@@ -6,13 +6,13 @@
 /*   By: csil <csil@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:48:50 by csil              #+#    #+#             */
-/*   Updated: 2023/12/09 11:00:56 by csil             ###   ########.fr       */
+/*   Updated: 2023/12/09 22:47:34 by csil             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	ft_destroy_mutex(t_bag *stock)
+static void	ft_destroy_mutex(t_bag *stock)
 {
 	int		i;
 
@@ -32,7 +32,7 @@ void	free_all_and_exit(t_bag *list, int nbr)
 {
 	if (list)
 	{
-		//ft_destroy_mutex(list);
+		ft_destroy_mutex(list);
 		if (list->tid)
 		{
 			free (list->tid);
@@ -52,8 +52,11 @@ void	free_all_and_exit(t_bag *list, int nbr)
 	exit (nbr);
 }
 
-void	print_error(t_bag *list, char *str, int nbr)
+void	print_error(t_bag *list, char *str, int nbr, int destroy)
 {
 	ft_printf("%s\n", str);
-	free_all_and_exit(list, nbr);
+	if (destroy == 1)
+		free_all_and_exit(list, nbr);
+	else
+		exit (nbr);
 }

@@ -6,7 +6,7 @@
 /*   By: csil <csil@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 23:12:26 by csil              #+#    #+#             */
-/*   Updated: 2023/12/09 21:12:57 by csil             ###   ########.fr       */
+/*   Updated: 2023/12/09 23:53:54 by csil             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,6 @@
 # include <stdio.h>
 # include <sys/time.h>
 # include <stdbool.h>
-
-// Rename some exec to make code more readable / practical
-/** shortcut for mutex **/
-typedef pthread_mutex_t	t_mtx;
 
 // define list to avoid error compil
 typedef struct s_philo	t_philo;
@@ -47,17 +43,17 @@ typedef enum e_keyw
 typedef struct s_bag
 {
 	int					nbr_philo;
-	long				time_to_die;
-	long				time_to_eat;
-	long				time_to_sleep;
-	long				meals_to_eat;
+	long long			time_to_die;
+	long long			time_to_eat;
+	long long			time_to_sleep;
+	long long			meals_to_eat;
 	pthread_mutex_t		print_state;
 	pthread_mutex_t		lock;
 	pthread_mutex_t		time_state;
 	pthread_mutex_t		*lfork;
 	t_philo				*lphilo;
 	pthread_t			*tid;
-	long				start_time;
+	long long			start_time;
 	int					dead;
 	int					end_simu;
 }				t_bag;
@@ -67,7 +63,7 @@ typedef struct s_philo
 {
 	int					id;
 	pthread_t			th_philo;
-	long				t_to_die;
+	long long			t_to_die;
 	int					meal_counter;
 	int					eating;
 	pthread_mutex_t		*r_fork;
@@ -94,7 +90,8 @@ void	check_exec_mutex(t_bag *list, int result, t_keyw kword);
 void	init_threads(t_bag *l);
 
 // free, exit & error
-void	print_error(t_bag *list, char *str, int nbr);
+void	print_error(t_bag *list, char *str,
+			int nbr, int destroy);
 void	*backup_malloc(t_bag *list, int i);
 void	free_all_and_exit(t_bag *list, int nbr);
 

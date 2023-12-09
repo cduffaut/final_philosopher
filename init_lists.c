@@ -6,7 +6,7 @@
 /*   By: csil <csil@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 23:23:03 by csil              #+#    #+#             */
-/*   Updated: 2023/12/09 19:07:00 by csil             ###   ########.fr       */
+/*   Updated: 2023/12/09 22:52:01 by csil             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ static void	init_forks(t_bag *stock)
 	i = -1;
 	while (++i < stock->nbr_philo)
 	{
-		//exec_mutex(stock, &stock->lfork[i], INIT);
-		pthread_mutex_init(&stock->lfork[i], NULL);
+		exec_mutex(stock, &stock->lfork[i], INIT);
 	}
 	i = 0;
 	stock->lphilo[0].l_fork = &stock->lfork[0];
@@ -61,7 +60,8 @@ static void	init_forks(t_bag *stock)
 void	init_lists(t_bag *stock)
 {
 	stock->lphilo = backup_malloc(stock, sizeof(t_philo) * stock->nbr_philo);
-	stock->lfork = backup_malloc(stock, sizeof(pthread_mutex_t) * stock->nbr_philo);
+	stock->lfork = backup_malloc(stock,
+			sizeof(pthread_mutex_t) * stock->nbr_philo);
 	stock->tid = backup_malloc(stock, sizeof(pthread_t) * stock->nbr_philo);
 	init_forks(stock);
 	init_philos(stock);

@@ -6,7 +6,7 @@
 /*   By: csil <csil@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 10:15:39 by csil              #+#    #+#             */
-/*   Updated: 2023/12/09 22:04:18 by csil             ###   ########.fr       */
+/*   Updated: 2023/12/09 23:54:43 by csil             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 
 void	print_action(t_bag *l, int i, int msg)
 {
-	long	time;
+	long long	time;
 
 	pthread_mutex_lock(&l->print_state);
 	time = get_time(l) - l->start_time;
 	if (l->dead != 1)
 	{
-		printf ("%ld %d ", time, l->lphilo[i].id);
+		printf ("%lld %d ", time, l->lphilo[i].id);
 		if (msg == DIED && l->dead == 0)
 		{
-			printf ("died\n");
 			l->dead = 1;
+			printf ("died\n");
 		}
 		else if (msg == THINK)
 			printf ("is thinking\n");
@@ -38,40 +38,21 @@ void	print_action(t_bag *l, int i, int msg)
 	pthread_mutex_unlock(&l->print_state);
 }
 
-void	ft_take_forks(t_philo *philo)
+static void	ft_eat(t_philo *philo)
 {
 	exec_mutex(philo->stock, philo->r_fork, LOCK);
 	print_action(philo->stock, philo->id - 1, FORK);
 	exec_mutex(philo->stock, philo->l_fork, LOCK);
 	print_action(philo->stock, philo->id - 1, FORK);
-}
-
-void	ft_drop_forks(t_philo *philo)
-{
-	exec_mutex(philo->stock, philo->r_fork, UNLOCK);
-	exec_mutex(philo->stock, philo->l_fork, UNLOCK);
-}
-
-void	ft_eat(t_philo *philo)
-{
-	ft_take_forks(philo);
-	exec_mutex(philo->stock, &philo->lock, LOCK);
 	philo->eating = 1;
 	philo->t_to_die = get_time(philo->stock) + philo->stock->time_to_die;
-	ft_usleep(philo->stock->time_to_eat, philo->stock);
+	ft_usleep((philo->stock->time_to_eat), philo->stock);
 	print_action(philo->stock, philo->id - 1, EAT);
 	philo->meal_counter++;
 	philo->eating = 0;
-	exec_mutex(philo->stock, &philo->lock, UNLOCK);
-	ft_drop_forks(philo);
+	exec_mutex(philo->stock, philo->r_fork, UNLOCK);
+	exec_mutex(philo->stock, philo->l_fork, UNLOCK);
 }
-
-void	ft_sleep(t_philo *philo)
-{
-	print_action(philo->stock, philo->id - 1, SLEEP);
-	ft_usleep(philo->stock->time_to_sleep, philo->stock);
-	print_action(philo->stock, philo->id - 1, THINK);
-}	
 
 // general routine for the philos
 void	*routine(void *philo)
@@ -79,19 +60,18 @@ void	*routine(void *philo)
 	t_philo	*lphilo;
 
 	lphilo = (t_philo *) philo;
+	exec_mutex(lphilo->stock, &lphilo->lock, LOCK);
 	lphilo->t_to_die = get_time(lphilo->stock) + lphilo->stock->time_to_die;
+	exec_mutex(lphilo->stock, &lphilo->lock, UNLOCK);
 	exec_thread(lphilo->stock, &lphilo->th_philo, &monitor, lphilo, CREATE);
 	while (lphilo->stock->dead == 0)
 	{
 		ft_eat(lphilo);
-		ft_sleep(lphilo);
+		print_action(lphilo->stock, lphilo->id - 1, SLEEP);
+		ft_usleep(lphilo->stock->time_to_sleep, lphilo->stock);
+		print_action(lphilo->stock, lphilo->id - 1, THINK);
 	}
-	if (pthread_join(lphilo->th_philo, NULL))
-	{
-		// temporary
-		printf("thread join failed\n");
-		return (NULL);
-	}
+	exec_thread(lphilo->stock, &lphilo->th_philo, NULL, NULL, JOIN);
 	return (NULL);
 }
 
@@ -105,9 +85,7 @@ void	*monitor_if_meal(void *philo)
 	{
 		exec_mutex(lphilo->stock, &lphilo->lock, LOCK);
 		if (lphilo->meal_counter >= lphilo->stock->meals_to_eat)
-		{
 			lphilo->stock->dead = 1;
-		}
 		exec_mutex(lphilo->stock, &lphilo->lock, UNLOCK);
 	}
 	return (NULL);
@@ -124,9 +102,7 @@ void	*monitor(void *philo)
 	{
 		exec_mutex(lphilo->stock, &lphilo->lock, LOCK);
 		if (lphilo->t_to_die <= get_time(lphilo->stock) && lphilo->eating == 0)
-		{
 			print_action(lphilo->stock, lphilo->id - 1, DIED);
-		}
 		if (lphilo->stock->meals_to_eat <= lphilo->meal_counter)
 		{
 			lphilo->stock->end_simu = 1;

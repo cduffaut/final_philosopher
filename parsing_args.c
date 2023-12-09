@@ -6,7 +6,7 @@
 /*   By: csil <csil@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 16:50:34 by csil              #+#    #+#             */
-/*   Updated: 2023/12/09 21:15:22 by csil             ###   ########.fr       */
+/*   Updated: 2023/12/09 22:57:48 by csil             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdio.h>
 
 // Return 1 if anything else than a number is found
-int	is_nbr(char c)
+static int	is_nbr(char c)
 {
 	if (c >= '0' && c <= '9')
 		return (0);
@@ -35,7 +35,7 @@ static int	create_nbr(char *str)
 		str++;
 	}
 	if (nbr > 2147483647)
-		print_error(NULL, "Error: number is too big", EXIT_FAILURE);
+		print_error(NULL, "Error: number is too big", EXIT_FAILURE, 0);
 	return (nbr);
 }
 
@@ -61,9 +61,9 @@ static int	check_is_nbr_legit(char *str)
 		str++;
 	else if (*str && *str == '-')
 		print_error(NULL, "Error: please enter only positive numbers",
-			EXIT_FAILURE);
+			EXIT_FAILURE, 0);
 	if (*str && is_nbr(*str) == 1)
-		print_error(NULL, "Error: please enter only numbers", EXIT_FAILURE);
+		print_error(NULL, "Error: please enter only numbers", EXIT_FAILURE, 0);
 	i = 0;
 	while (str[i] && is_nbr(str[i]) == 0)
 	{
@@ -71,9 +71,9 @@ static int	check_is_nbr_legit(char *str)
 		i++;
 	}
 	if (len_nbr > 10)
-		print_error(NULL, "Error: number is too big", EXIT_FAILURE);
+		print_error(NULL, "Error: number is too big", EXIT_FAILURE, 0);
 	else if (len_nbr == 0)
-		print_error(NULL, "Error: there is a missing argument", EXIT_FAILURE);
+		print_error(NULL, "Error: an argument is missing", EXIT_FAILURE, 0);
 	len_nbr = create_nbr(str);
 	return (len_nbr);
 }
@@ -91,7 +91,7 @@ void	parsing_args(t_bag *stock, char **argv)
 	else
 		stock->meals_to_eat = -1;
 	if (stock->nbr_philo == 0)
-		print_error(NULL, "Error: one philo min is required", EXIT_FAILURE);
+		print_error(NULL, "Error: one philo min is required", EXIT_FAILURE, 0);
 	stock->dead = 0;
 	stock->end_simu = 0;
 	pthread_mutex_init(&stock->lock, NULL);
